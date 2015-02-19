@@ -1,11 +1,13 @@
 package assembly.giraff;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import assembly.giraff.facebook.FacebookFragment;
 import assembly.giraff.model.User;
 
 
@@ -21,12 +23,20 @@ public class MainActivity extends BaseActivity
     private User mCurrentUser;
     private CharSequence mTitle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main_view);
 
-         //set custom toolbar
+        if (getIntent().hasExtra("user")) {
+            mCurrentUser = getIntent().getExtras().getParcelable("user");
+        }
+        if (mCurrentUser == null) {
+            mCurrentUser = new User("Derp Derpo",58);
+        }
+        //uncomment to show the user card
+        //mCurrentUser.setIsUpgraded(true);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -39,6 +49,7 @@ public class MainActivity extends BaseActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
     }
 
     @Override
@@ -54,7 +65,7 @@ public class MainActivity extends BaseActivity
                 mTitle = getString(R.string.title_section2);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_section_user);
                 break;
         }
     }
